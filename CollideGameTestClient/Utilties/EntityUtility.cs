@@ -90,16 +90,17 @@ namespace CollideGameTestClient.Utilties
         {
             AddCollision(one, two);
 
-            var angle = Vector.AngleBetween(one.Vector, two.Vector);
-            
-            var vector1 = new Vector(Math.Sin(one.Vector.X), Math.Cos(one.Vector.Y));
-            one.Vector = vector1;
-            one.Vector.Normalize();
+            //var angle = Vector.AngleBetween(one.Vector, two.Vector);
 
-            //angle = Vector.AngleBetween(one.Vector, two.Vector);
-            var vector2 = new Vector(Math.Sin(two.Vector.X), Math.Cos(two.Vector.Y));
-            two.Vector = vector2;
-            two.Vector.Normalize();
+            //var vector1 = new Vector(Math.Sin(one.Vector.X), Math.Cos(one.Vector.Y));
+            //one.Vector = vector1;
+            //one.Vector.Normalize();
+
+            //var vector2 = new Vector(Math.Sin(two.Vector.X), Math.Cos(two.Vector.Y));
+            //two.Vector = vector2;
+            //two.Vector.Normalize();
+            var vector1 = Vector.CrossProduct(one.Vector, two.Vector);
+            one.Vector = vector1;
         }
 
         public static void MoveEntity(EntityBase entity, Vector vector)
