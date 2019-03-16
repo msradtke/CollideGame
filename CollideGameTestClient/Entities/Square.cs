@@ -6,19 +6,15 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Shapes;
+
 namespace CollideGameTestClient.Entities
 {
-    public class Circle : EntityBase
+    public class Square : EntityBase
     {
-
-
-        public Circle(Point start,double radius, Vector vector, Path path):base(start,radius,vector,path)
+        public Square(Point start, double radius, Vector vector, Path path,double width) : base(start, radius, vector, path)
         {
-            Radius = radius;
-            Geometry = new EllipseGeometry(new Point(0,0), Radius, Radius);
+            Geometry = new RectangleGeometry(new Rect { Width = width, Height = width });
             path.Data = Geometry;
         }
-        public double Radius { get; set; }
-
     }
 }

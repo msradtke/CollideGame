@@ -13,8 +13,12 @@ namespace CollideGameTestClient.Entities
 {
     public class EntityBase : INotifyPropertyChanged
     {
-        public EntityBase()
+        public EntityBase(Point start, double radius, Vector vector, Path path)
         {
+            Point = start;
+            HitboxRadius = radius;
+            Vector = vector;
+            Path = path;
             Collisions = new List<EntityBase>();
         }
         public double X { get { return Point.X; } }
@@ -25,7 +29,7 @@ namespace CollideGameTestClient.Entities
         public Path Path { get; set; }
         public double HitboxRadius { get; set; }
         public List<EntityBase> Collisions { get; set; }
-
+        public EntityBase Collision { get; set; }
         public delegate void ChangeViewEventHandler(object sender, object FactoryParameter = null);
 
         public event PropertyChangedEventHandler PropertyChanged;

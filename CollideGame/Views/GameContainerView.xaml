@@ -36,6 +36,6 @@
                 </ItemsControl>
             </Canvas>
         </Border>
-        <TextBlock Text="{Binding StatusMessage}" Grid.Row="1"></TextBlock>
+        <Button Command="{Binding GenerateCommand}" Grid.Row="1" HorizontalAlignment="Right"> Generate</Button>
     </Grid>
 </UserControl>

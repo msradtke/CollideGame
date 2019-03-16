@@ -63,6 +63,7 @@
     <Compile Include="Entities\Circle.cs" />
     <Compile Include="Entities\EntityBase.cs" />
     <Compile Include="Entities\GameArea.cs" />
+    <Compile Include="Entities\Square.cs" />
     <Compile Include="Utilties\EntityUtility.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace CollideGameTestClient.Utilties
 {
@@ -16,14 +18,13 @@ namespace CollideGameTestClient.Utilties
         {
         }
 
-        public static void CheckForCollision(List<EntityBase> entities)
+        public static void CheckForCollision(List<EntityBase> e)
         {
+            var entities = new List<EntityBase>(e);
             foreach (var entity in entities)
             {
-                HandleWallCollision(entity);
                 foreach (var entity2 in entities)
                 {
-
                     if (entity == entity2)
                         continue;
 
@@ -39,9 +40,9 @@ namespace CollideGameTestClient.Utilties
                         HandleCollision(entity, entity2);
 
                 }
+                HandleWallCollision(entity);
             }
         }
-
         public static void RemoveCollision(EntityBase a, EntityBase b)
         {
             if (a.Collisions.Contains(b))
@@ -49,6 +50,7 @@ namespace CollideGameTestClient.Utilties
 
             if (b.Collisions.Contains(a))
                 b.Collisions.Remove(a);
+
         }
         public static bool AreColliding(EntityBase a, EntityBase b)
         {
@@ -89,18 +91,15 @@ namespace CollideGameTestClient.Utilties
         public static void HandleCollision(EntityBase one, EntityBase two)
         {
             AddCollision(one, two);
+            var d = one.Point - two.Point;
+            var distance = d.Length;
+            d.Normalize();
+            var dotprod = Vector.Multiply(d, one.Vector - two.Vector);
+            var impulse = d * dotprod;
 
-            //var angle = Vector.AngleBetween(one.Vector, two.Vector);
+            one.Vector -= impulse;
+            two.Vector += impulse;
 
-            //var vector1 = new Vector(Math.Sin(one.Vector.X), Math.Cos(one.Vector.Y));
-            //one.Vector = vector1;
-            //one.Vector.Normalize();
-
-            //var vector2 = new Vector(Math.Sin(two.Vector.X), Math.Cos(two.Vector.Y));
-            //two.Vector = vector2;
-            //two.Vector.Normalize();
-            var vector1 = Vector.CrossProduct(one.Vector, two.Vector);
-            one.Vector = vector1;
         }
 
         public static void MoveEntity(EntityBase entity, Vector vector)
@@ -108,13 +107,72 @@ namespace CollideGameTestClient.Utilties
             entity.Vector = vector;
         }
 
-        public static void MoveEntities(List<EntityBase> entities)
+        public static void MoveEntities(List<EntityBase> e)
         {
+            var entities = new List<EntityBase>(e);
             foreach (var entity in entities)
             {
 
                 entity.Point = new Point(entity.X + entity.Vector.X, entity.Y + entity.Vector.Y);
             }
         }
+        public static EntityBase GetRandomEntity()
+        {
+            var path = new Path();
+            path.Stroke = Brushes.Black;
+            path.StrokeThickness = 1;
+            path.Fill = Brushes.Blue;
+
+            var minVel = .001;
+            Random r = new Random();
+            
+
+            double width = r.NextDouble() * (MaxWidth - 1) + 1;
+            double height = r.NextDouble() * (MaxHeight - 1) + 1;
+            double radius = r.NextDouble() * (MaxRadius - 1) + 1;
+            double xVelocity = r.NextDouble() * (MaxSpeed - minVel) + minVel;
+            double yVelocity = r.NextDouble() * (MaxSpeed - minVel) + minVel;
+
+            double xStart = r.NextDouble() * (GameArea.Width - 2 * radius) + radius;
+            double yStart = r.NextDouble() * (GameArea.Height - 2 * radius) + radius;
+            var start = new Point(xStart, yStart);
+
+            EntityBase entityBase;
+            var t = r.Next(0,2);
+            if (t == 0)
+                entityBase = new Circle(start, radius, new Vector(xVelocity, yVelocity), path);
+            else
+                entityBase = new Square(start, width/2, new Vector(xVelocity, yVelocity), path, width);
+
+            return entityBase;
+        }
+
+        public static bool TryAddEntity(EntityBase entity, List<EntityBase> entities)
+        {
+            var entityBases = new List<EntityBase>(entities);
+            bool noCollision = true;
+            foreach (var e in entityBases)
+            {
+                var distance = Math.Abs(Point.Subtract(entity.Point, e.Point).Length);
+                if (distance > entity.HitboxRadius + e.HitboxRadius)
+                {
+                    continue;
+                }
+                if (distance <= entity.HitboxRadius + e.HitboxRadius) //collision
+                {
+                    noCollision = false;
+                    break;
+                }
+            }
+
+            return noCollision;
+        }
+
+
+        public static double MaxWidth { get; set; }
+        public static double MaxHeight { get; set; }
+        public static double MaxRadius { get; set; }
+        public static double MaxSpeed { get; set; }
+
     }
 }

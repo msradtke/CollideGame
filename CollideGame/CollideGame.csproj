@@ -64,6 +64,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ViewModels\ActionCommand.cs" />
     <Compile Include="ViewModels\GameContainerViewModel.cs" />
     <Compile Include="ViewModels\RegionPubSubEvent.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />

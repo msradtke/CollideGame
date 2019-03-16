@@ -26,6 +26,18 @@ namespace CollideGameTestClient.Model
             StatusMessage = "Game Started";
             GameArea = new GameArea(500, 500);
             EntityUtility.GameArea = GameArea;
+            EntityUtility.MaxWidth = 50;
+            EntityUtility.MaxHeight = 50;
+            EntityUtility.MaxRadius = 50;
+            EntityUtility.MaxSpeed = 4;
+
+
+
+
+
+
+
+
             Entities = new List<EntityBase>();
             var path = new Path();
             path.Stroke = Brushes.Black;
@@ -43,15 +55,15 @@ namespace CollideGameTestClient.Model
 
             var startPoint = new Point(50, 50);
 
-            testCircle = new Circle(startPoint, 10, new System.Windows.Vector(1,0), path);
-            leftTopCircle = new Circle(new Point(15,15), 10, new System.Windows.Vector(0,1), path2);
-            bottomRightCircle = new Circle(new Point(250, 250), 10, new System.Windows.Vector(1.5,1), path3);
+            testCircle = new Circle(startPoint, 10, new System.Windows.Vector(1, 0), path);
+            leftTopCircle = new Circle(new Point(15, 15), 10, new System.Windows.Vector(0, 1), path2);
+            bottomRightCircle = new Circle(new Point(250, 250), 10, new System.Windows.Vector(1.5, 1), path3);
 
-            Entities.Add(testCircle);
-            Entities.Add(leftTopCircle);
-            Entities.Add(bottomRightCircle);
 
-            
+            //Entities.Add(leftTopCircle);
+            //Entities.Add(bottomRightCircle);
+
+
 
 
 
@@ -75,7 +87,7 @@ namespace CollideGameTestClient.Model
             while (true)
             {
                 var span = DateTime.UtcNow - prevTime;
-                var persec = TimeSpan.FromMilliseconds(1000/120);
+                var persec = TimeSpan.FromMilliseconds(1000 / 120);
 
                 if (span >= persec)
                 {
@@ -86,8 +98,15 @@ namespace CollideGameTestClient.Model
                     prevTime = DateTime.UtcNow;
 
                 }
-                
+
             }
+        }
+
+        public void GenerateRandomEntity()
+        {
+            var e = EntityUtility.GetRandomEntity();
+            if (EntityUtility.TryAddEntity(e, Entities))
+                Entities.Add(e);
         }
         public bool IsRunning { get; set; }
     }
